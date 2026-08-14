@@ -1,1 +1,53 @@
-/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;600;800&display=swap");
+
+:root {
+  --bg: #fafafa;
+  --text: #111517;
+  --surface: #ffffff;
+  --input: #808080;
+  --border: #dfe3e8;
+  --focus: #2b3945;
+}
+
+[data-theme="dark"] {
+  --bg: #202c37;
+  --text: #ffffff;
+  --surface: #2b3945;
+  --input: #cfd8df;
+  --border: #3a4a57;
+  --focus: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Nunito Sans", "Segoe UI", sans-serif;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background: var(--bg);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
