@@ -1,12 +1,23 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, computed, inject } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { ThemeService } from './core/theme/theme.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'angular-countries-list';
+  readonly themeService = inject(ThemeService);
+
+  readonly isDarkTheme = computed(() => this.themeService.theme() === 'dark');
+
+  readonly themeButtonLabel = computed(() =>
+    this.isDarkTheme() ? 'Light Mode' : 'Dark Mode',
+  );
+
+  toggleTheme(): void {
+    this.themeService.toggle();
+  }
 }
