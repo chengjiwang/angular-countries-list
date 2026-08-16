@@ -53,6 +53,10 @@ function normalizeCountry(country: Record<string, unknown>): Country {
         name['official'] ?? name['common'] ?? country['name'] ?? '',
       ),
     },
+    nativeName:
+      typeof country['nativeName'] === 'string'
+        ? country['nativeName']
+        : undefined,
     flags: {
       svg: String(flags['svg'] ?? country['flag'] ?? ''),
       png: String(flags['png'] ?? country['flag'] ?? ''),
@@ -62,6 +66,11 @@ function normalizeCountry(country: Record<string, unknown>): Country {
       ? (country['capital'] as string[])
       : typeof country['capital'] === 'string'
         ? [country['capital']]
+        : [],
+    topLevelDomain: Array.isArray(country['topLevelDomain'])
+      ? (country['topLevelDomain'] as string[])
+      : typeof country['topLevelDomain'] === 'string'
+        ? [country['topLevelDomain']]
         : [],
     region: String(country['region'] ?? ''),
     subregion:

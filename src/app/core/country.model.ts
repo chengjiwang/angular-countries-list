@@ -4,12 +4,14 @@ export interface Country {
     common: string;
     official: string;
   };
+  nativeName?: string;
   flags: {
     svg: string;
     png: string;
     alt?: string;
   };
   capital?: string[];
+  topLevelDomain?: string[];
   region: string;
   subregion?: string;
   population: number;

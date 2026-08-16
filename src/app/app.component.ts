@@ -4,6 +4,7 @@ import { ThemeService } from './core/theme/theme.service';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet, RouterLink],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
