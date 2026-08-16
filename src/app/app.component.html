@@ -16,7 +16,11 @@
         [attr.aria-pressed]="isDarkTheme()"
         (click)="toggleTheme()"
       >
-        <span class="theme-toggle__icon" aria-hidden="true"></span>
+        @if (isDarkTheme()) {
+          <svg lucideSun class="theme-toggle__icon"></svg>
+        } @else {
+          <svg lucideMoon class="theme-toggle__icon"></svg>
+        }
         <span>{{ themeButtonLabel() }}</span>
       </button>
     </div>
