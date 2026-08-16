@@ -4,7 +4,7 @@
 
 .countries-layout {
   display: grid;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 .countries-controls {
@@ -17,10 +17,117 @@
   width: 100%;
   border: 1px solid var(--border);
   background: var(--surface);
-  color: var(--input);
+  color: var(--text);
   border-radius: 0.5rem;
   padding: 0.8rem 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.search-field input::placeholder {
+  color: var(--input);
+}
+
+.countries-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2.25rem;
+}
+
+.country-item {
+  min-width: 0;
+}
+
+.country-card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.country-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.country-card:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.country-flag {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: color-mix(in srgb, var(--surface) 70%, var(--text) 30%);
+}
+
+.country-content {
+  padding: 1.35rem 1.45rem 1.7rem;
+}
+
+.country-name {
+  margin: 0 0 0.95rem;
+  font-size: 1.1rem;
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+.country-content p {
+  margin: 0.35rem 0;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--text) 90%, var(--surface) 10%);
+}
+
+.country-content p span {
+  font-weight: 600;
+}
+
+.state-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+}
+
+.state-title {
+  margin: 0;
+  font-weight: 800;
+}
+
+.state-body {
+  margin: 0.45rem 0 0;
+  color: color-mix(in srgb, var(--text) 80%, var(--surface) 20%);
+}
+
+.retry-button {
+  margin-top: 0.95rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 0.45rem;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.retry-button:hover {
+  background: color-mix(in srgb, var(--surface) 70%, var(--text) 30%);
+}
+
+.retry-button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 .sr-only {
@@ -44,5 +151,22 @@
     grid-template-columns: minmax(220px, 460px) minmax(180px, 240px);
     justify-content: space-between;
     align-items: center;
+  }
+
+  .countries-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .countries-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1240px) {
+  .countries-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

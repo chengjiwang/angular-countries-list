@@ -1,4 +1,6 @@
 <section class="countries-layout" aria-labelledby="countries-title">
+  <h1 id="countries-title" class="sr-only">Countries</h1>
+
   <div class="countries-controls" aria-label="Countries controls preview">
     <label class="search-field">
       <span class="sr-only">Search countries</span>
@@ -12,4 +14,47 @@
       </select>
     </label>
   </div>
+
+  @if (isLoading()) {
+    <div class="state-card" role="status" aria-live="polite">
+      <p class="state-title">Loading countries...</p>
+      <p class="state-body">Please wait while we fetch the latest data.</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="state-card" role="alert" aria-live="assertive">
+      <p class="state-title">Could not load countries</p>
+      <p class="state-body">{{ errorMessage() }}</p>
+      <button type="button" class="retry-button" (click)="loadCountries()">
+        Try again
+      </button>
+    </div>
+  } @else if (isEmpty()) {
+    <div class="state-card" role="status" aria-live="polite">
+      <p class="state-title">No countries found</p>
+      <p class="state-body">The countries list is currently empty.</p>
+    </div>
+  } @else {
+    <ul class="countries-grid" aria-label="Countries list">
+      @for (country of countries(); track country.cca3) {
+        <li class="country-item">
+          <a class="country-card" [routerLink]="['/countries', country.cca3]">
+            <img
+              class="country-flag"
+              [src]="country.flags.png"
+              [alt]="country.flags.alt || country.name.common + ' flag'"
+              loading="lazy"
+            />
+
+            <div class="country-content">
+              <h2 class="country-name">{{ country.name.common }}</h2>
+
+              <p><span>Population:</span> {{ country.population | number }}</p>
+              <p><span>Region:</span> {{ country.region }}</p>
+              <p><span>Capital:</span> {{ getCapital(country) }}</p>
+            </div>
+          </a>
+        </li>
+      }
+    </ul>
+  }
 </section>
