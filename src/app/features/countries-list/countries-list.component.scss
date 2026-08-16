@@ -115,6 +115,11 @@
   color: color-mix(in srgb, var(--text) 80%, var(--surface) 20%);
 }
 
+.results-meta {
+  font-size: 0.92rem;
+  color: color-mix(in srgb, var(--text) 82%, var(--surface) 18%);
+}
+
 .retry-button {
   margin-top: 0.95rem;
   border: 1px solid var(--border);

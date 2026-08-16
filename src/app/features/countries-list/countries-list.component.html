@@ -48,7 +48,7 @@
     </div>
   } @else {
     <ul class="countries-grid" aria-label="Countries list">
-      @for (country of filteredCountries(); track country.cca3) {
+      @for (country of paginatedCountries(); track country.cca3) {
         <li class="country-item">
           <a class="country-card" [routerLink]="['/countries', country.cca3]">
             <img
@@ -69,5 +69,18 @@
         </li>
       }
     </ul>
+
+    <div class="results-meta" aria-live="polite">
+      Showing {{ resultStart() }}-{{ resultEnd() }} of
+      {{ filteredCountries().length }} countries
+    </div>
+
+    @if (totalPages() > 1) {
+      <app-pagination
+        [currentPage]="currentPage()"
+        [totalPages]="totalPages()"
+        (pageChange)="onPageChange($event)"
+      />
+    }
   }
 </section>

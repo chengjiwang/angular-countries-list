@@ -17,6 +17,23 @@ describe('CountriesListComponent', () => {
   let fixture: ComponentFixture<CountriesListComponent>;
   let service: CountryServiceStub;
 
+  const buildCountry = (index: number, region = 'Europe'): Country => ({
+    cca3: `C${String(index).padStart(2, '0')}`,
+    name: {
+      common: `Country ${index}`,
+      official: `Country ${index} Official`,
+    },
+    flags: {
+      svg: `https://example.com/country-${index}.svg`,
+      png: `https://example.com/country-${index}.png`,
+    },
+    capital: [`Capital ${index}`],
+    region,
+    population: 1000000 + index,
+    area: 50000 + index,
+    timezones: ['UTC+00:00'],
+  });
+
   const countries: Country[] = [
     {
       cca3: 'USA',
@@ -191,5 +208,111 @@ describe('CountriesListComponent', () => {
 
     expect(service.getCountries).toHaveBeenCalledTimes(2);
     expect(compiled.querySelectorAll('.country-card').length).toBe(2);
+  });
+
+  it('should render 12 countries per page', () => {
+    const manyCountries = Array.from({ length: 13 }, (_, index) =>
+      buildCountry(index + 1),
+    );
+    service.getCountries.and.returnValue(of(manyCountries));
+
+    fixture = TestBed.createComponent(CountriesListComponent);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelectorAll('.country-card').length).toBe(12);
+    expect(compiled.textContent).toContain('Country 1');
+    expect(compiled.textContent).not.toContain('Country 13');
+  });
+
+  it('should navigate to next page and show remaining countries', () => {
+    const manyCountries = Array.from({ length: 13 }, (_, index) =>
+      buildCountry(index + 1),
+    );
+    service.getCountries.and.returnValue(of(manyCountries));
+
+    fixture = TestBed.createComponent(CountriesListComponent);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const nextButton = Array.from(
+      compiled.querySelectorAll('.pagination .pagination-button'),
+    ).find((button) => button.textContent?.trim() === 'Next') as
+      | HTMLButtonElement
+      | undefined;
+
+    expect(nextButton).toBeDefined();
+    nextButton?.click();
+    fixture.detectChanges();
+
+    expect(compiled.querySelectorAll('.country-card').length).toBe(1);
+    const countryTitle = compiled.querySelector('.country-name')?.textContent;
+    expect(countryTitle?.trim()).toBe('Country 13');
+  });
+
+  it('should reset pagination to first page when search changes', () => {
+    const manyCountries = Array.from({ length: 13 }, (_, index) =>
+      buildCountry(index + 1),
+    );
+    service.getCountries.and.returnValue(of(manyCountries));
+
+    fixture = TestBed.createComponent(CountriesListComponent);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const nextButton = Array.from(
+      compiled.querySelectorAll('.pagination .pagination-button'),
+    ).find((button) => button.textContent?.trim() === 'Next') as
+      | HTMLButtonElement
+      | undefined;
+
+    nextButton?.click();
+    fixture.detectChanges();
+
+    const searchInput = compiled.querySelector(
+      '.search-field input',
+    ) as HTMLInputElement;
+    searchInput.value = 'Country 1';
+    searchInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const component = fixture.componentInstance;
+    expect(component.currentPage()).toBe(1);
+    expect(compiled.textContent).toContain('Country 1');
+  });
+
+  it('should reset pagination to first page when region filter changes', () => {
+    const manyCountries = [
+      ...Array.from({ length: 12 }, (_, index) =>
+        buildCountry(index + 1, 'Asia'),
+      ),
+      buildCountry(13, 'Africa'),
+    ];
+    service.getCountries.and.returnValue(of(manyCountries));
+
+    fixture = TestBed.createComponent(CountriesListComponent);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const nextButton = Array.from(
+      compiled.querySelectorAll('.pagination .pagination-button'),
+    ).find((button) => button.textContent?.trim() === 'Next') as
+      | HTMLButtonElement
+      | undefined;
+
+    nextButton?.click();
+    fixture.detectChanges();
+
+    const regionSelect = compiled.querySelector(
+      '.region-filter select',
+    ) as HTMLSelectElement;
+    regionSelect.value = 'Africa';
+    regionSelect.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    const component = fixture.componentInstance;
+    expect(component.currentPage()).toBe(1);
+    expect(compiled.querySelectorAll('.country-card').length).toBe(1);
+    expect(compiled.textContent).toContain('Country 13');
   });
 });

@@ -1,25 +1,28 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { Country } from '../../core/country.model';
 import { CountryService } from '../../core/api/country.service';
+import { PaginationComponent } from './pagination.component';
 
 @Component({
   selector: 'app-countries-list',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, PaginationComponent],
   templateUrl: './countries-list.component.html',
   styleUrl: './countries-list.component.scss',
 })
 export class CountriesListComponent {
   private readonly countryService = inject(CountryService);
+  private readonly pageSize = 12;
 
   readonly countries = signal<Country[]>([]);
   readonly searchKeyword = signal('');
   readonly selectedRegion = signal('');
+  readonly currentPage = signal(1);
   readonly isLoading = signal(true);
   readonly errorMessage = signal<string | null>(null);
 
@@ -50,6 +53,34 @@ export class CountriesListComponent {
     });
   });
 
+  readonly totalPages = computed(() =>
+    Math.max(1, Math.ceil(this.filteredCountries().length / this.pageSize)),
+  );
+
+  readonly paginatedCountries = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.pageSize;
+
+    return this.filteredCountries().slice(
+      startIndex,
+      startIndex + this.pageSize,
+    );
+  });
+
+  readonly resultStart = computed(() => {
+    if (this.filteredCountries().length === 0) {
+      return 0;
+    }
+
+    return (this.currentPage() - 1) * this.pageSize + 1;
+  });
+
+  readonly resultEnd = computed(() =>
+    Math.min(
+      this.currentPage() * this.pageSize,
+      this.filteredCountries().length,
+    ),
+  );
+
   readonly isEmpty = computed(
     () =>
       !this.isLoading() &&
@@ -58,6 +89,14 @@ export class CountriesListComponent {
   );
 
   constructor() {
+    effect(() => {
+      const totalPages = this.totalPages();
+
+      if (this.currentPage() > totalPages) {
+        this.currentPage.set(totalPages);
+      }
+    });
+
     this.loadCountries();
   }
 
@@ -85,9 +124,15 @@ export class CountriesListComponent {
 
   onSearchChange(value: string): void {
     this.searchKeyword.set(value);
+    this.currentPage.set(1);
   }
 
   onRegionChange(value: string): void {
     this.selectedRegion.set(value);
+    this.currentPage.set(1);
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage.set(page);
   }
 }
