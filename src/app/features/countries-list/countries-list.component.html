@@ -1,16 +1,27 @@
 <section class="countries-layout" aria-labelledby="countries-title">
   <h1 id="countries-title" class="sr-only">Countries</h1>
 
-  <div class="countries-controls" aria-label="Countries controls preview">
+  <div class="countries-controls" aria-label="Countries controls">
     <label class="search-field">
       <span class="sr-only">Search countries</span>
-      <input type="search" placeholder="Search for a country..." disabled />
+      <input
+        type="search"
+        placeholder="Search for a country..."
+        [value]="searchKeyword()"
+        (input)="onSearchChange($any($event.target).value)"
+      />
     </label>
 
     <label class="region-filter">
       <span class="sr-only">Filter by region</span>
-      <select disabled>
-        <option>Filter by Region</option>
+      <select
+        [value]="selectedRegion()"
+        (change)="onRegionChange($any($event.target).value)"
+      >
+        <option value="">Filter by Region</option>
+        @for (region of regions(); track region) {
+          <option [value]="region">{{ region }}</option>
+        }
       </select>
     </label>
   </div>
@@ -31,11 +42,13 @@
   } @else if (isEmpty()) {
     <div class="state-card" role="status" aria-live="polite">
       <p class="state-title">No countries found</p>
-      <p class="state-body">The countries list is currently empty.</p>
+      <p class="state-body">
+        Try adjusting your search keyword or region filter.
+      </p>
     </div>
   } @else {
     <ul class="countries-grid" aria-label="Countries list">
-      @for (country of countries(); track country.cca3) {
+      @for (country of filteredCountries(); track country.cca3) {
         <li class="country-item">
           <a class="country-card" [routerLink]="['/countries', country.cca3]">
             <img

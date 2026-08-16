@@ -27,6 +27,12 @@
   color: var(--input);
 }
 
+.search-field input:focus-visible,
+.region-filter select:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
 .countries-grid {
   list-style: none;
   margin: 0;

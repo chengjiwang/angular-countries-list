@@ -34,6 +34,22 @@ describe('CountriesListComponent', () => {
       area: 9833520,
       timezones: ['UTC-05:00'],
     },
+    {
+      cca3: 'JPN',
+      name: {
+        common: 'Japan',
+        official: 'Japan',
+      },
+      flags: {
+        svg: 'https://example.com/jpn.svg',
+        png: 'https://example.com/jpn.png',
+      },
+      capital: ['Tokyo'],
+      region: 'Asia',
+      population: 125800000,
+      area: 377975,
+      timezones: ['UTC+09:00'],
+    },
   ];
 
   beforeEach(async () => {
@@ -72,9 +88,70 @@ describe('CountriesListComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelectorAll('.country-card').length).toBe(1);
+    expect(compiled.querySelectorAll('.country-card').length).toBe(2);
     expect(compiled.textContent).toContain('United States');
     expect(compiled.textContent).toContain('Americas');
+  });
+
+  it('should filter countries by search keyword', () => {
+    service.getCountries.and.returnValue(of(countries));
+
+    fixture = TestBed.createComponent(CountriesListComponent);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const searchInput = compiled.querySelector(
+      '.search-field input',
+    ) as HTMLInputElement;
+
+    searchInput.value = 'japan';
+    searchInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const cards = compiled.querySelectorAll('.country-card');
+    expect(cards.length).toBe(1);
+    expect(compiled.textContent).toContain('Japan');
+    expect(compiled.textContent).not.toContain('United States');
+  });
+
+  it('should filter countries by selected region', () => {
+    service.getCountries.and.returnValue(of(countries));
+
+    fixture = TestBed.createComponent(CountriesListComponent);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const regionSelect = compiled.querySelector(
+      '.region-filter select',
+    ) as HTMLSelectElement;
+
+    regionSelect.value = 'Americas';
+    regionSelect.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    const cards = compiled.querySelectorAll('.country-card');
+    expect(cards.length).toBe(1);
+    expect(compiled.textContent).toContain('United States');
+    expect(compiled.textContent).not.toContain('Japan');
+  });
+
+  it('should show empty state when search and filter produce no matches', () => {
+    service.getCountries.and.returnValue(of(countries));
+
+    fixture = TestBed.createComponent(CountriesListComponent);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const searchInput = compiled.querySelector(
+      '.search-field input',
+    ) as HTMLInputElement;
+
+    searchInput.value = 'unknown-country';
+    searchInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(compiled.textContent).toContain('No countries found');
+    expect(compiled.querySelectorAll('.country-card').length).toBe(0);
   });
 
   it('should show empty state when API returns no countries', () => {
@@ -113,6 +190,6 @@ describe('CountriesListComponent', () => {
     fixture.detectChanges();
 
     expect(service.getCountries).toHaveBeenCalledTimes(2);
-    expect(compiled.querySelectorAll('.country-card').length).toBe(1);
+    expect(compiled.querySelectorAll('.country-card').length).toBe(2);
   });
 });
