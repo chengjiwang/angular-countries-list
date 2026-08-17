@@ -1,0 +1,86 @@
+<section class="country-detail" aria-labelledby="country-detail-title">
+  <a class="back-button" routerLink="/countries">
+    <span aria-hidden="true">←</span>
+    <span>Back</span>
+  </a>
+
+  @if (isLoading()) {
+    <div class="state-card" role="status" aria-live="polite">
+      <p class="state-title">Loading country...</p>
+      <p class="state-body">Fetching country details and nearby borders.</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="state-card" role="alert" aria-live="assertive">
+      <p class="state-title">Could not load country</p>
+      <p class="state-body">{{ errorMessage() }}</p>
+      <button type="button" class="retry-button" (click)="reload()">
+        Try again
+      </button>
+    </div>
+  } @else if (isNotFound()) {
+    <div class="state-card" role="status" aria-live="polite">
+      <p class="state-title">Country not found</p>
+      <p class="state-body">
+        The requested country code does not match any known country.
+      </p>
+    </div>
+  } @else if (country()) {
+    <article class="country-panel">
+      <div class="flag-frame">
+        <img
+          class="country-flag"
+          [src]="country()!.flags.svg || country()!.flags.png"
+          [alt]="country()!.flags.alt || country()!.name.common + ' flag'"
+        />
+      </div>
+
+      <div class="country-content">
+        <h1 id="country-detail-title" class="country-name">
+          {{ country()!.name.common }}
+        </h1>
+
+        <div class="detail-columns">
+          <dl class="detail-list">
+            @for (item of primaryDetails(); track item.label) {
+              <div class="detail-item">
+                <dt>{{ item.label }}:</dt>
+                <dd>{{ item.value }}</dd>
+              </div>
+            }
+          </dl>
+
+          <dl class="detail-list">
+            @for (item of secondaryDetails(); track item.label) {
+              <div class="detail-item">
+                <dt>{{ item.label }}:</dt>
+                <dd>{{ item.value }}</dd>
+              </div>
+            }
+          </dl>
+        </div>
+
+        <div class="border-section">
+          <h2 class="border-title">Border Countries:</h2>
+
+          @if (borderCountries().length > 0) {
+            <div class="border-links">
+              @for (
+                borderCountry of borderCountries();
+                track borderCountry.code
+              ) {
+                <a
+                  class="border-chip"
+                  [routerLink]="['/countries', borderCountry.code]"
+                >
+                  {{ borderCountry.name }}
+                </a>
+              }
+            </div>
+          } @else {
+            <p class="border-empty">No border countries available.</p>
+          }
+        </div>
+      </div>
+    </article>
+  }
+</section>

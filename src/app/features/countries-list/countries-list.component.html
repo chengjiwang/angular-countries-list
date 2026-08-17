@@ -1,0 +1,86 @@
+<section class="countries-layout" aria-labelledby="countries-title">
+  <h1 id="countries-title" class="sr-only">Countries</h1>
+
+  <div class="countries-controls" aria-label="Countries controls">
+    <label class="search-field">
+      <span class="sr-only">Search countries</span>
+      <input
+        type="search"
+        placeholder="Search for a country..."
+        [value]="searchKeyword()"
+        (input)="onSearchChange($any($event.target).value)"
+      />
+    </label>
+
+    <label class="region-filter">
+      <span class="sr-only">Filter by region</span>
+      <select
+        [value]="selectedRegion()"
+        (change)="onRegionChange($any($event.target).value)"
+      >
+        <option value="">Filter by Region</option>
+        @for (region of regions(); track region) {
+          <option [value]="region">{{ region }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  @if (isLoading()) {
+    <div class="state-card" role="status" aria-live="polite">
+      <p class="state-title">Loading countries...</p>
+      <p class="state-body">Please wait while we fetch the latest data.</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="state-card" role="alert" aria-live="assertive">
+      <p class="state-title">Could not load countries</p>
+      <p class="state-body">{{ errorMessage() }}</p>
+      <button type="button" class="retry-button" (click)="loadCountries()">
+        Try again
+      </button>
+    </div>
+  } @else if (isEmpty()) {
+    <div class="state-card" role="status" aria-live="polite">
+      <p class="state-title">No countries found</p>
+      <p class="state-body">
+        Try adjusting your search keyword or region filter.
+      </p>
+    </div>
+  } @else {
+    <ul class="countries-grid" aria-label="Countries list">
+      @for (country of paginatedCountries(); track country.cca3) {
+        <li class="country-item">
+          <a class="country-card" [routerLink]="['/countries', country.cca3]">
+            <img
+              class="country-flag"
+              [src]="country.flags.png"
+              [alt]="country.flags.alt || country.name.common + ' flag'"
+              loading="lazy"
+            />
+
+            <div class="country-content">
+              <h2 class="country-name">{{ country.name.common }}</h2>
+
+              <p><span>Population:</span> {{ country.population | number }}</p>
+              <p><span>Region:</span> {{ country.region }}</p>
+              <p><span>Capital:</span> {{ getCapital(country) }}</p>
+            </div>
+          </a>
+        </li>
+      }
+    </ul>
+
+    <div class="results-meta" aria-live="polite">
+      Showing {{ resultStart() }}-{{ resultEnd() }} of
+      {{ filteredCountries().length }} countries
+    </div>
+
+    @if (totalPages() > 1) {
+      <app-pagination
+        [currentPage]="currentPage()"
+        [totalPages]="totalPages()"
+        (pageChange)="onPageChange($event)"
+      />
+    }
+  }
+</section>

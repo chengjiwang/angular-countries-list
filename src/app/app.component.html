@@ -1,0 +1,32 @@
+<div class="app-shell">
+  <header class="topbar">
+    <div class="inner">
+      <a
+        class="brand"
+        routerLink="/countries"
+        aria-label="Go to countries homepage"
+      >
+        Where in the world?
+      </a>
+
+      <button
+        class="theme-toggle"
+        type="button"
+        [attr.aria-label]="'Switch to ' + themeButtonLabel()"
+        [attr.aria-pressed]="isDarkTheme()"
+        (click)="toggleTheme()"
+      >
+        @if (isDarkTheme()) {
+          <svg lucideSun class="theme-toggle__icon"></svg>
+        } @else {
+          <svg lucideMoon class="theme-toggle__icon"></svg>
+        }
+        <span class="theme-toggle__label">{{ themeButtonLabel() }}</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <router-outlet />
+  </main>
+</div>
