@@ -1,0 +1,254 @@
+:host {
+  display: block;
+}
+
+.country-detail {
+  display: grid;
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+.back-button {
+  width: fit-content;
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 0.45rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+  font-size: 0.95rem;
+  font-weight: 300;
+}
+
+.back-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.back-button:focus-visible,
+.retry-button:focus-visible,
+.border-chip:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.state-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  padding: 1.25rem 1.35rem;
+}
+
+.state-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.state-body {
+  margin: 0.5rem 0 0;
+  color: color-mix(in srgb, var(--text) 82%, var(--surface) 18%);
+}
+
+.retry-button {
+  margin-top: 1rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 0.45rem;
+  padding: 0.55rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.country-panel {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4.5rem);
+}
+
+.flag-frame {
+  width: 100%;
+  max-width: 35rem;
+  justify-self: start;
+  background: transparent;
+  border-radius: 0;
+  overflow: hidden;
+  border: 0;
+  box-shadow: none;
+}
+
+.country-flag {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 320 / 229;
+  object-fit: cover;
+  background: color-mix(in srgb, var(--surface) 72%, var(--text) 28%);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.country-content {
+  display: grid;
+  align-content: center;
+  gap: clamp(1.5rem, 4vw, 2.05rem);
+  min-width: 0;
+}
+
+.country-name {
+  margin: 0;
+  font-size: clamp(1.75rem, 4vw, 2rem);
+  line-height: 1.15;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.detail-columns {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.4rem);
+}
+
+.detail-list {
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.detail-item dt {
+  font-weight: 800;
+}
+
+.detail-item dd {
+  margin: 0;
+  color: color-mix(in srgb, var(--text) 84%, var(--surface) 16%);
+  overflow-wrap: anywhere;
+}
+
+.border-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.border-title {
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 1.4;
+  font-weight: 800;
+}
+
+.border-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.border-chip {
+  max-width: 100%;
+  min-width: min(9rem, 100%);
+  padding: 0.75rem 1rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-size: 0.92rem;
+  overflow-wrap: anywhere;
+}
+
+.border-chip:hover {
+  background: color-mix(in srgb, var(--surface) 72%, var(--text) 28%);
+}
+
+.border-empty {
+  margin: 0;
+  color: color-mix(in srgb, var(--text) 82%, var(--surface) 18%);
+}
+
+@media (max-width: 767px) {
+  .back-button {
+    padding: 0.75rem 1.15rem;
+    font-size: 0.95rem;
+  }
+
+  .flag-frame {
+    max-width: 100%;
+  }
+
+  .detail-item {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .country-panel {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .detail-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.75rem);
+  }
+
+  .border-section {
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 980px) {
+  .country-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .flag-frame {
+    max-width: 42rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .country-detail {
+    padding-top: 1rem;
+  }
+
+  .country-name {
+    font-size: 2rem;
+  }
+
+  .detail-item,
+  .border-title {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1240px) {
+  .border-section {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 0.75rem 1.5rem;
+  }
+
+  .border-title {
+    white-space: nowrap;
+  }
+}
