@@ -4,11 +4,12 @@
 
 .country-detail {
   display: grid;
-  gap: 2.5rem;
+  gap: clamp(2rem, 6vw, 5rem);
 }
 
 .back-button {
   width: fit-content;
+  max-width: 100%;
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
@@ -71,12 +72,12 @@
 
 .country-panel {
   display: grid;
-  gap: 2.75rem;
+  gap: clamp(2rem, 5vw, 4.5rem);
 }
 
 .flag-frame {
   width: 100%;
-  max-width: 40rem;
+  max-width: 35rem;
   justify-self: start;
   background: transparent;
   border-radius: 0;
@@ -98,19 +99,21 @@
 .country-content {
   display: grid;
   align-content: center;
-  gap: 2.05rem;
+  gap: clamp(1.5rem, 4vw, 2.05rem);
+  min-width: 0;
 }
 
 .country-name {
   margin: 0;
-  font-size: 2rem;
+  font-size: clamp(1.75rem, 4vw, 2rem);
   line-height: 1.15;
   font-weight: 800;
+  overflow-wrap: anywhere;
 }
 
 .detail-columns {
   display: grid;
-  gap: 2.15rem;
+  gap: clamp(1.5rem, 4vw, 2.4rem);
 }
 
 .detail-list {
@@ -124,7 +127,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.35rem;
-  font-size: 1rem;
+  font-size: 0.98rem;
   line-height: 1.55;
 }
 
@@ -135,11 +138,12 @@
 .detail-item dd {
   margin: 0;
   color: color-mix(in srgb, var(--text) 84%, var(--surface) 16%);
+  overflow-wrap: anywhere;
 }
 
 .border-section {
   display: grid;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .border-title {
@@ -153,11 +157,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+  min-width: 0;
 }
 
 .border-chip {
-  min-width: 6.2rem;
-  padding: 0.8rem 1rem;
+  max-width: 100%;
+  min-width: min(9rem, 100%);
+  padding: 0.75rem 1rem;
   border-radius: 0.35rem;
   border: 1px solid var(--border);
   background: var(--surface);
@@ -166,6 +172,7 @@
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   font-size: 0.92rem;
+  overflow-wrap: anywhere;
 }
 
 .border-chip:hover {
@@ -179,49 +186,49 @@
 
 @media (max-width: 767px) {
   .back-button {
-    padding: 0.8rem 1.5rem;
-    font-size: 1.05rem;
+    padding: 0.75rem 1.15rem;
+    font-size: 0.95rem;
   }
 
   .flag-frame {
     max-width: 100%;
   }
+
+  .detail-item {
+    font-size: 0.95rem;
+  }
 }
 
 @media (min-width: 768px) {
-  .country-detail {
-    gap: 5rem;
-  }
-
   .country-panel {
-    grid-template-columns: minmax(0, 560px) minmax(0, 1fr);
-    align-items: center;
-    gap: 4.5rem;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
   }
 
   .detail-columns {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2.75rem;
+    gap: clamp(1.5rem, 3vw, 2.75rem);
   }
 
   .border-section {
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: center;
-    gap: 0.75rem 1.5rem;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 980px) {
+  .country-panel {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .border-title {
-    white-space: nowrap;
+  .flag-frame {
+    max-width: 42rem;
   }
 }
 
 @media (min-width: 1024px) {
   .country-detail {
     padding-top: 1rem;
-  }
-
-  .country-panel {
-    gap: 5rem;
   }
 
   .country-name {
@@ -231,5 +238,17 @@
   .detail-item,
   .border-title {
     font-size: 1rem;
+  }
+}
+
+@media (min-width: 1240px) {
+  .border-section {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 0.75rem 1.5rem;
+  }
+
+  .border-title {
+    white-space: nowrap;
   }
 }

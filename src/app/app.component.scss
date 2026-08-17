@@ -19,8 +19,8 @@
 .inner {
   max-width: 1280px;
   margin: 0 auto;
-  min-height: 5rem;
-  padding: 0 1rem;
+  min-height: 4.5rem;
+  padding: 0.9rem clamp(1rem, 3vw, 2rem);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -30,7 +30,8 @@
 .brand {
   text-decoration: none;
   color: var(--text);
-  font-size: 0.95rem;
+  min-width: 0;
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
   font-weight: 800;
   letter-spacing: 0.01em;
 }
@@ -43,6 +44,7 @@
 .theme-toggle {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   border: 1px solid transparent;
   background: transparent;
@@ -56,6 +58,8 @@
   transition:
     background-color 180ms ease,
     border-color 180ms ease;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .theme-toggle:hover {
@@ -75,16 +79,40 @@
   stroke-width: 1.9;
 }
 
+.theme-toggle__label {
+  display: inline-block;
+}
+
 .page-container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem 1rem 2.5rem;
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem)
+    clamp(2.25rem, 5vw, 3.5rem);
+}
+
+@media (max-width: 420px) {
+  .inner {
+    min-height: 4rem;
+    gap: 0.5rem;
+  }
+
+  .brand {
+    font-size: 0.9rem;
+  }
+
+  .theme-toggle {
+    padding-inline: 0.55rem;
+  }
+
+  .theme-toggle__label {
+    display: none;
+  }
 }
 
 @media (min-width: 768px) {
   .inner {
     min-height: 5rem;
-    padding: 0 3.5rem;
+    padding-inline: clamp(2rem, 5vw, 3.5rem);
   }
 
   .brand {
@@ -96,6 +124,7 @@
   }
 
   .page-container {
-    padding: 3rem 3.5rem;
+    padding: clamp(2.5rem, 5vw, 3.5rem) clamp(2rem, 5vw, 3.5rem)
+      clamp(3rem, 5vw, 4rem);
   }
 }
